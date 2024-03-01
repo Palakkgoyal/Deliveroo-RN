@@ -14,8 +14,10 @@ import {
   ChevronDownIcon,
   UserIcon,
   AdjustmentsVerticalIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
 } from "react-native-heroicons/outline";
+import Categories from "../components/Categories";
+import FeaturedRow from "../components/FeaturedRow";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -27,10 +29,9 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <SafeAreaView
-      className={`${
-        Platform.OS === "android" ? `pt-[${StatusBar.currentHeight + 3}px]` : 0
-      } bg-white`}
+    <View
+      // Later check that why StatusBar.currentHeight is not working properly
+      className={`${Platform.OS === "android" ? "pt-9" : 0} bg-white`}
     >
       <View className="flex-row items-center space-x-2 pb-3 px-4">
         <View>
@@ -52,15 +53,39 @@ export default function HomeScreen() {
 
       <View className="flex-row items-center space-x-2 pb-2 px-4">
         <View className="flex-row space-x-2 bg-gray-200 py-2 px-3 flex-1 items-center">
-          <MagnifyingGlassIcon size={20} color="gray"/>
-          <TextInput placeholder="restaurant and cuisines" keyboardType="default"/>
+          <MagnifyingGlassIcon size={20} color="gray" />
+          <TextInput
+            placeholder="restaurant and cuisines"
+            keyboardType="default"
+          />
         </View>
-        <AdjustmentsVerticalIcon size={30} color="#00CCBB"/>
+        <AdjustmentsVerticalIcon size={30} color="#00CCBB" />
       </View>
 
-      <ScrollView>
-        {/* Categories */}
+      <ScrollView className="bg-gray-100" contentContainerStyle={{paddingBottom: 130}}>
+        <Categories />
+
+        {/* Featured */}
+        <FeaturedRow
+          title="Featured"
+          description="Paid placements from our partners"
+          id="123"
+        />
+
+        {/* Tasty Discounts */}
+        <FeaturedRow
+          title="Tasty Discounts"
+          description="Everyone's been enjoying these juicy discounts!"
+          id="1234"
+        />
+
+        {/* Offers near you */}
+        <FeaturedRow
+          title="Offers near you"
+          description="Why not support your local restaurant tonight!"
+          id="1235"
+        />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
