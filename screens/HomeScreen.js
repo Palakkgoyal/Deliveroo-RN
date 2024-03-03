@@ -1,10 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
-  SafeAreaView,
-  StatusBar,
   Platform,
   Image,
   TextInput,
@@ -18,15 +16,31 @@ import {
 } from "react-native-heroicons/outline";
 import Categories from "../components/Categories";
 import FeaturedRow from "../components/FeaturedRow";
+import sanityClient from "../sanity/client";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const [fetauredCategory, setFeaturedCategory] = useState([])
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
+
+  useEffect(() => {
+    sanityClient.fetch(`
+    *[_type=="featured"] {
+      ...,
+      restaurants[] -> {
+        ...,
+        dishes[] ->,
+      }
+    }
+    `).then(data => setFeaturedCategory(data))
+  }, [])
+
+  console.log(fetauredCategory)
 
   return (
     <View
