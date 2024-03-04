@@ -20,7 +20,7 @@ import sanityClient from "../sanity/client";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
-  const [fetauredCategory, setFeaturedCategory] = useState([])
+  const [fetauredCategory, setFeaturedCategory] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -29,7 +29,9 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    sanityClient.fetch(`
+    sanityClient
+      .fetch(
+        `
     *[_type=="featured"] {
       ...,
       restaurants[] -> {
@@ -37,10 +39,11 @@ export default function HomeScreen() {
         dishes[] ->,
       }
     }
-    `).then(data => setFeaturedCategory(data))
-  }, [])
+    `
+      )
+      .then((data) => setFeaturedCategory(data));
+  }, []);
 
-  console.log(fetauredCategory)
 
   return (
     <View
@@ -76,29 +79,19 @@ export default function HomeScreen() {
         <AdjustmentsVerticalIcon size={30} color="#00CCBB" />
       </View>
 
-      <ScrollView className="bg-gray-100" contentContainerStyle={{paddingBottom: 130}}>
+      <ScrollView
+        className="bg-gray-100"
+        contentContainerStyle={{ paddingBottom: 130 }}
+      >
         <Categories />
-
-        {/* Featured */}
-        <FeaturedRow
-          title="Featured"
-          description="Paid placements from our partners"
-          id="123"
-        />
-
-        {/* Tasty Discounts */}
-        <FeaturedRow
-          title="Tasty Discounts"
-          description="Everyone's been enjoying these juicy discounts!"
-          id="1234"
-        />
-
-        {/* Offers near you */}
-        <FeaturedRow
-          title="Offers near you"
-          description="Why not support your local restaurant tonight!"
-          id="1235"
-        />
+        {fetauredCategory?.map((category) => (
+          <FeaturedRow
+            title={category.name}
+            description={category.short_description}
+            id={category._id}
+            key={category._id}
+          />
+        ))}
       </ScrollView>
     </View>
   );
