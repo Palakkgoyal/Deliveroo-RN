@@ -12,7 +12,6 @@ import DeliveryScreen from "./screens/DeliveryScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  console.log("App executed");
   return (
     <Provider store={store}>
       <NavigationContainer>
