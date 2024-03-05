@@ -3,16 +3,34 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { urlFor } from "../sanity/client";
 import Currency from "react-currency-formatter";
 import { MinusCircleIcon, PlusCircleIcon } from "react-native-heroicons/solid";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToBasket,
+  removeFromBasket,
+  selectBasketItemsWithId,
+} from "../features/basketSlice";
 
 export default function DishRow({ id, name, description, price, image }) {
   const [isPressed, setIsPressed] = useState(false);
+  const dispatch = useDispatch();
+  const items = useSelector((state) => selectBasketItemsWithId(state, id));
 
-  console.log(isPressed, "isPressed");
+  const addItemToBasket = () => {
+    dispatch(addToBasket({ id, name, description, price, image }));
+  };
+
+  const removeItemFromBasket = () => {
+    if (!items.length > 0) return;
+    dispatch(removeFromBasket({ id }));
+  };
+
   return (
     <>
       <TouchableOpacity
         onPress={() => setIsPressed((prev) => !prev)}
-        className={`bg-white p-4 border ${isPressed && "border-b-0"} border-gray-200`}
+        className={`bg-white p-4 border ${
+          isPressed && "border-b-0"
+        } border-gray-200`}
       >
         <View className="flex-row">
           <View className="flex-1 pr-2">
@@ -39,13 +57,19 @@ export default function DishRow({ id, name, description, price, image }) {
       {isPressed && (
         <View className="bg-white px-4">
           <View className="flex-row items-center space-x-2 pb-3">
-            <TouchableOpacity>
-              <MinusCircleIcon color="#00CCBB" size={40} />
+            <TouchableOpacity
+              onPress={removeItemFromBasket}
+              disabled={!items.length}
+            >
+              <MinusCircleIcon
+                color={items.length > 0 ? "#00CCBB" : "gray"}
+                size={40}
+              />
             </TouchableOpacity>
 
-            <Text>0</Text>
+            <Text>{items.length}</Text>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={addItemToBasket}>
               <PlusCircleIcon color="#00CCBB" size={40} />
             </TouchableOpacity>
           </View>
