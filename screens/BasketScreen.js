@@ -106,8 +106,13 @@ const BasketScreen = () => {
               <Currency quantity={basketTotal + 5.99} currency="INR" />
             </Text>
           </View>
-          <TouchableOpacity className="rounded-lg bg-[#00CCBB] p-4">
-            <Text className="text-center text-white font-bold text-lg">Place Order</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("PreparingOrder")}
+            className="rounded-lg bg-[#00CCBB] p-4"
+          >
+            <Text className="text-center text-white font-bold text-lg">
+              Place Order
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
